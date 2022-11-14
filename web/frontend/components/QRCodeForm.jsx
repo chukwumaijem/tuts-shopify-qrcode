@@ -384,9 +384,6 @@ export function QRCodeForm({ QRCode: InitialQRCode }) {
 
 /* Builds a URL to the selected product */
 function productViewURL({ host, productHandle, discountCode }) {
-  console.log('==host==', host);
-  console.log('==productHandle==', productHandle);
-  console.log('==discountCode==', discountCode);
   const url = new URL(host);
   const productPath = `/products/${productHandle}`;
 
