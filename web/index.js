@@ -13,8 +13,9 @@ import redirectToAuth from './helpers/redirect-to-auth.js';
 import { BillingInterval } from './helpers/ensure-billing.js';
 import { AppInstallations } from './app_installations.js';
 
-import applyQrCodeApiEndpoints from './middleware/qr-code-api.js';
 import { QRCodesDB } from './qr-codes-db.js';
+import applyQrCodeApiEndpoints from './middleware/qr-code-api.js';
+import applyQrCodePublicEndpoints from "./middleware/qr-code-public.js";
 
 const USE_ONLINE_TOKENS = false;
 
@@ -23,8 +24,6 @@ const PORT = parseInt(process.env.BACKEND_PORT || process.env.PORT, 10);
 // TODO: There should be provided by env vars
 const DEV_INDEX_PATH = `${process.cwd()}/frontend/`;
 const PROD_INDEX_PATH = `${process.cwd()}/frontend/dist/`;
-
-const DB_PATH = `${process.cwd()}/database.sqlite`;
 
 const dbFile = join(process.cwd(), 'database.sqlite');
 const sessionDb = new Shopify.Session.SQLiteSessionStorage(dbFile);
@@ -94,6 +93,7 @@ export async function createServer(
   applyAuthMiddleware(app, {
     billing: billingSettings,
   });
+  applyQrCodePublicEndpoints(app);
 
   // Do not call app.use(express.json()) before processing webhooks with
   // Shopify.Webhooks.Registry.process().
