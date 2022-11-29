@@ -1,16 +1,17 @@
-import { Shopify } from "@shopify/shopify-api";
+import { Shopify } from '@shopify/shopify-api';
+import { USE_ONLINE_TOKENS } from '../constants';
 
-export default async function redirectToAuth(req, res, app) {
+export default async function redirectToAuth(req, res) {
   if (!req.query.shop) {
     res.status(500);
-    return res.send("No shop provided");
+    return res.send('No shop provided');
   }
 
-  if (req.query.embedded === "1") {
+  if (req.query.embedded === '1') {
     return clientSideRedirect(req, res);
   }
 
-  return await serverSideRedirect(req, res, app);
+  return await serverSideRedirect(req, res);
 }
 
 function clientSideRedirect(req, res) {
@@ -28,13 +29,13 @@ function clientSideRedirect(req, res) {
   return res.redirect(`/exitiframe?${queryParams}`);
 }
 
-async function serverSideRedirect(req, res, app) {
+async function serverSideRedirect(req, res) {
   const redirectUrl = await Shopify.Auth.beginAuth(
     req,
     res,
     req.query.shop,
-    "/api/auth/callback",
-    app.get("use-online-tokens")
+    '/api/auth/callback',
+    USE_ONLINE_TOKENS
   );
 
   return res.redirect(redirectUrl);

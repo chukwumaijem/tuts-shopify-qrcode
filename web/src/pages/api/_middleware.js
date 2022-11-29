@@ -1,1 +1,1 @@
-export { middleware } from './middleware/root';
+export { middleware } from '../../middleware/root';
